@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -10,16 +11,23 @@ import (
 )
 
 type Message struct {
-	Action string `json:"action"`
+	Action string    `json:"action"`
+	Params CarDetail `json:"params"`
 }
 
-var data []string = []string{
-	"{\"name\": \"Monza\", \"year\": \"1999\"}",
-	"{\"name\": \"Marea\", \"year\": \"2000\"}",
-	"{\"name\": \"Kaddet\", \"year\": \"1996\"}",
-	"{\"name\": \"Uno Mile\", \"year\": \"2001\"}",
-	"{\"name\": \"Clio\", \"year\": \"2001\"}",
-	"{\"name\": \"Pegout\", \"year\": \"2001\"}",
+type CarDetail struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+	Year string `json:"year"`
+}
+
+var data map[string]string = map[string]string{
+	"1": "{\"id\": \"1\", \"name\": \"Monza\", \"year\": \"1999\"}",
+	"2": "{\"id\": \"2\", \"name\": \"Marea\", \"year\": \"2000\"}",
+	"3": "{\"id\": \"3\", \"name\": \"Kaddet\", \"year\": \"1996\"}",
+	"4": "{\"id\": \"4\", \"name\": \"Uno Mile\", \"year\": \"2001\"}",
+	"5": "{\"id\": \"5\", \"name\": \"Clio\", \"year\": \"2001\"}",
+	"6": "{\"id\": \"6\", \"name\": \"Pegout\", \"year\": \"2001\"}",
 }
 
 func main() {
@@ -48,7 +56,7 @@ func main() {
 				decoded := &Message{}
 				err = json.Unmarshal(msg, decoded)
 				if err != nil {
-					log.Printf("err when decode client message: %e\n", err)
+					log.Printf("err when decode client message: %v\n", err)
 					return
 				}
 
@@ -60,6 +68,16 @@ func main() {
 						}
 						continue
 					}
+				} else if decoded.Action == "update" {
+					newValue := fmt.Sprintf(
+						"{\"id\": \"%s\", \"name\": \"%s\", \"year\": \"%s\"}",
+						decoded.Params.Id,
+						decoded.Params.Name,
+						decoded.Params.Year,
+					)
+
+					log.Printf("atualizando para %s", newValue)
+					data[decoded.Params.Id] = newValue
 				} else {
 					return
 				}

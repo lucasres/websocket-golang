@@ -38,22 +38,32 @@
 </div>
  
 <script>
+    let currentRow = 0
     // Set your JSS license key (The following key only works for one day)
     jspreadsheet.setLicense('NWI3ZjllZjU5YWYwMjBkMThmMjkyNDkzMjZmMWUyMzI2NTllY2Y4ZTZhNTQ1NjM2MGMyY2QyMDJlOWQwYTJmYjE2OTEzODNiNDhkYzkxNWEzMjc1OTExMTQ5MDFkMzNmOWI3MTRjYmJiMjhiM2NjM2E3ZjJjZjYxNWI3ZjgxZDcsZXlKdVlXMWxJam9pU25Od2NtVmhaSE5vWldWMElpd2laR0YwWlNJNk1UWTRNemN4TlRjd05pd2laRzl0WVdsdUlqcGJJbXB6Y0hKbFlXUnphR1ZsZEM1amIyMGlMQ0pqYjJSbGMyRnVaR0p2ZUM1cGJ5SXNJbXB6YUdWc2JDNXVaWFFpTENKamMySXVZWEJ3SWl3aWJHOWpZV3hvYjNOMElsMHNJbkJzWVc0aU9pSXpJaXdpYzJOdmNHVWlPbHNpZGpjaUxDSjJPQ0lzSW5ZNUlpd2lZMmhoY25Seklpd2labTl5YlhNaUxDSm1iM0p0ZFd4aElpd2ljR0Z5YzJWeUlpd2ljbVZ1WkdWeUlpd2lZMjl0YldWdWRITWlMQ0pwYlhCdmNuUWlMQ0ppWVhJaUxDSjJZV3hwWkdGMGFXOXVjeUlzSW5ObFlYSmphQ0pkTENKa1pXMXZJanAwY25WbGZRPT0=');
     
     // Create a new spreadsheet
     let sheet = jspreadsheet(document.getElementById('spreadsheet'), {
         worksheets: [{
-            minDimensions: [2,10],
+            minDimensions: [3,10],
             columns: [
+                { title:'Id', width:'50px' },
                 { title:'Modelo', width:'300px' },
                 { title:'Year', width:'80px' },
-            ]
-        }]
+            ],
+        }],
+        onchange: (worksheet, cell, x, y, newValue, oldValue) => {
+            if (newValue == "") {
+                return
+            }
+            let data = worksheet.getRowData(y)
+            console.log(data);
+            let msg = JSON.stringify({ action: 'update', params: {id: data[0].toString(), name: data[1], year:data[2].toString()} })
+            console.log(msg);
+            socket.send(msg)
+        }
     });
 
-    let currentRow = 0
-    let spreedSheetData = []
 
     console.log(sheet[0]);
 
@@ -76,7 +86,7 @@
     socket.onmessage = ev => {
         console.log("Socket Message: ", ev)
         let decoded = JSON.parse(ev.data)
-        let data = [decoded.name, decoded.year]
+        let data = [decoded.id,decoded.name, decoded.year]
 
         sheet[0].setRowData(
             currentRow,
