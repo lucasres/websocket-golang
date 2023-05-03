@@ -1,0 +1,93 @@
+<html>
+<script src="https://jspreadsheet.com/v9/jspreadsheet.js"></script>
+<script src="https://jsuites.net/v4/jsuites.js"></script>
+<link rel="stylesheet" href="https://jspreadsheet.com/v9/jspreadsheet.css" type="text/css" />
+<link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+ 
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons" />
+
+<style>
+    .main {
+        display: flex;
+        flex-direction: column;
+        width: 100vw;
+    }
+
+    .operations {
+        margin-top: 2rem;
+    }
+
+    .operations button {
+        padding: 1rem;
+        border: 1px solid #000;
+        background: #fff;
+        font-weight: bold;
+        outline: 0;
+    }
+
+
+</style>
+
+<div class="main">
+    <div>
+        <div id='spreadsheet'></div>
+    </div>
+    <div class="operations">
+        <button onclick="handleCall()">Solicitar dados</button>
+    </div>
+</div>
+ 
+<script>
+    // Set your JSS license key (The following key only works for one day)
+    jspreadsheet.setLicense('NWI3ZjllZjU5YWYwMjBkMThmMjkyNDkzMjZmMWUyMzI2NTllY2Y4ZTZhNTQ1NjM2MGMyY2QyMDJlOWQwYTJmYjE2OTEzODNiNDhkYzkxNWEzMjc1OTExMTQ5MDFkMzNmOWI3MTRjYmJiMjhiM2NjM2E3ZjJjZjYxNWI3ZjgxZDcsZXlKdVlXMWxJam9pU25Od2NtVmhaSE5vWldWMElpd2laR0YwWlNJNk1UWTRNemN4TlRjd05pd2laRzl0WVdsdUlqcGJJbXB6Y0hKbFlXUnphR1ZsZEM1amIyMGlMQ0pqYjJSbGMyRnVaR0p2ZUM1cGJ5SXNJbXB6YUdWc2JDNXVaWFFpTENKamMySXVZWEJ3SWl3aWJHOWpZV3hvYjNOMElsMHNJbkJzWVc0aU9pSXpJaXdpYzJOdmNHVWlPbHNpZGpjaUxDSjJPQ0lzSW5ZNUlpd2lZMmhoY25Seklpd2labTl5YlhNaUxDSm1iM0p0ZFd4aElpd2ljR0Z5YzJWeUlpd2ljbVZ1WkdWeUlpd2lZMjl0YldWdWRITWlMQ0pwYlhCdmNuUWlMQ0ppWVhJaUxDSjJZV3hwWkdGMGFXOXVjeUlzSW5ObFlYSmphQ0pkTENKa1pXMXZJanAwY25WbGZRPT0=');
+    
+    // Create a new spreadsheet
+    let sheet = jspreadsheet(document.getElementById('spreadsheet'), {
+        worksheets: [{
+            minDimensions: [2,10],
+            columns: [
+                { title:'Modelo', width:'300px' },
+                { title:'Year', width:'80px' },
+            ]
+        }]
+    });
+
+    let currentRow = 0
+    let spreedSheetData = []
+
+    console.log(sheet[0]);
+
+    let socket = new WebSocket("ws://127.0.0.1:8000/ws");
+
+    console.log("Attempting Connection...");
+
+    socket.onopen = () => {
+        console.log("Successfully Connected");
+    };
+    
+    socket.onclose = event => {
+        console.log("Socket Closed Connection: ", event);
+    };
+
+    socket.onerror = error => {
+        console.log("Socket Error: ", error);
+    };
+
+    socket.onmessage = ev => {
+        console.log("Socket Message: ", ev)
+        let decoded = JSON.parse(ev.data)
+        let data = [decoded.name, decoded.year]
+
+        sheet[0].setRowData(
+            currentRow,
+            data
+        )
+        currentRow++
+    };
+    
+    function handleCall() {
+        console.log("chamou o envio");
+        socket.send(JSON.stringify({action: "getProducts"}))
+    }
+</script>
+</html>
