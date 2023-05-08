@@ -1,0 +1,19 @@
+version: '3.5'
+services:
+  web-service:
+    container_name: web-service
+    image: nginx:1.21.6-alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - "./docker/nginx:/etc/nginx/conf.d"
+  go-app:
+    container_name: goapp
+    image: golang:1.20-alpine3.17
+    build: 
+      context: .
+      dockerfile: "./docker/go/Dockerfile"
+    expose:
+      - "8000"
+    volumes:
+      - ".:/application"

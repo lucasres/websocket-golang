@@ -40,7 +40,7 @@
 <script>
     let currentRow = 0
     // Set your JSS license key (The following key only works for one day)
-    jspreadsheet.setLicense('NWI3ZjllZjU5YWYwMjBkMThmMjkyNDkzMjZmMWUyMzI2NTllY2Y4ZTZhNTQ1NjM2MGMyY2QyMDJlOWQwYTJmYjE2OTEzODNiNDhkYzkxNWEzMjc1OTExMTQ5MDFkMzNmOWI3MTRjYmJiMjhiM2NjM2E3ZjJjZjYxNWI3ZjgxZDcsZXlKdVlXMWxJam9pU25Od2NtVmhaSE5vWldWMElpd2laR0YwWlNJNk1UWTRNemN4TlRjd05pd2laRzl0WVdsdUlqcGJJbXB6Y0hKbFlXUnphR1ZsZEM1amIyMGlMQ0pqYjJSbGMyRnVaR0p2ZUM1cGJ5SXNJbXB6YUdWc2JDNXVaWFFpTENKamMySXVZWEJ3SWl3aWJHOWpZV3hvYjNOMElsMHNJbkJzWVc0aU9pSXpJaXdpYzJOdmNHVWlPbHNpZGpjaUxDSjJPQ0lzSW5ZNUlpd2lZMmhoY25Seklpd2labTl5YlhNaUxDSm1iM0p0ZFd4aElpd2ljR0Z5YzJWeUlpd2ljbVZ1WkdWeUlpd2lZMjl0YldWdWRITWlMQ0pwYlhCdmNuUWlMQ0ppWVhJaUxDSjJZV3hwWkdGMGFXOXVjeUlzSW5ObFlYSmphQ0pkTENKa1pXMXZJanAwY25WbGZRPT0=');
+    jspreadsheet.setLicense('Y2VlMjdmMmQ5NWY1MWRhOTAyODY4MmM1YjhiZWI0ZjllMWU0YzE3MmI1N2QyZWIzMjc3MzBlYTU5YzVjYWM4Y2E1ZmFjOTk1ZGU5NjczZDA5MzM5YmRjZDczNzI5ZGUzYjU5Mzk5M2NlNzI4MmY1NjQ4NGU0Y2RmNmI5ZWY1MmUsZXlKdVlXMWxJam9pU25Od2NtVmhaSE5vWldWMElpd2laR0YwWlNJNk1UWTROREV3T1RBNE55d2laRzl0WVdsdUlqcGJJbXB6Y0hKbFlXUnphR1ZsZEM1amIyMGlMQ0pqYjJSbGMyRnVaR0p2ZUM1cGJ5SXNJbXB6YUdWc2JDNXVaWFFpTENKamMySXVZWEJ3SWl3aWJHOWpZV3hvYjNOMElsMHNJbkJzWVc0aU9pSXpJaXdpYzJOdmNHVWlPbHNpZGpjaUxDSjJPQ0lzSW5ZNUlpd2lZMmhoY25Seklpd2labTl5YlhNaUxDSm1iM0p0ZFd4aElpd2ljR0Z5YzJWeUlpd2ljbVZ1WkdWeUlpd2lZMjl0YldWdWRITWlMQ0pwYlhCdmNuUWlMQ0ppWVhJaUxDSjJZV3hwWkdGMGFXOXVjeUlzSW5ObFlYSmphQ0pkTENKa1pXMXZJanAwY25WbGZRPT0=');
     
     // Create a new spreadsheet
     let sheet = jspreadsheet(document.getElementById('spreadsheet'), {
@@ -63,7 +63,6 @@
             socket.send(msg)
         }
     });
-
 
     console.log(sheet[0]);
 
